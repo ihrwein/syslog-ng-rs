@@ -7,11 +7,15 @@
 // modified, or distributed except according to those terms.
 
 use syslog_ng_sys;
+use syslog_ng_sys::LogPipe;
 
 pub struct LogParser(*mut syslog_ng_sys::LogParser);
 
 impl LogParser {
     pub fn wrap_raw(raw: *mut syslog_ng_sys::LogParser) -> LogParser {
         LogParser(raw)
+    }
+    pub fn as_pipe(&mut self) -> *mut LogPipe {
+        self.0 as *mut LogPipe
     }
 }

@@ -4,10 +4,14 @@ use LogMessage;
 use syslog_ng_sys::logpipe::__log_pipe_forward_msg;
 use syslog_ng_sys::LogPathOptions;
 
+pub trait Pipe {
+    fn forward(&mut self, msg: LogMessage);
+}
+
 pub struct LogPipe(*mut syslog_ng_sys::LogPipe);
 
-impl LogPipe {
-    pub fn forward_msg(&mut self, msg: LogMessage) {
+impl Pipe for LogPipe {
+    fn forward(&mut self, msg: LogMessage) {
         let mut path_options = LogPathOptions::default();
         path_options.ack_needed = 0;
         unsafe {

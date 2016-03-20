@@ -17,13 +17,11 @@ impl LogParser {
     pub fn wrap_raw(raw: *mut syslog_ng_sys::LogParser) -> LogParser {
         LogParser(raw)
     }
-    fn as_pipe_mut(&mut self) -> &mut LogPipe {
-        unsafe { &mut *(self.0 as *mut LogPipe) }
-    }
 }
 
 impl Pipe for LogParser {
     fn forward(&mut self, msg: LogMessage) {
-        self.as_pipe_mut().forward(msg)
+        let mut logpipe = LogPipe(self.0 as *mut syslog_ng_sys::LogPipe);
+        logpipe.forward(msg)
     }
 }

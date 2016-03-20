@@ -8,7 +8,7 @@ pub trait Pipe {
     fn forward(&mut self, msg: LogMessage);
 }
 
-pub struct LogPipe(*mut syslog_ng_sys::LogPipe);
+pub struct LogPipe(pub *mut syslog_ng_sys::LogPipe);
 
 impl Pipe for LogPipe {
     fn forward(&mut self, msg: LogMessage) {

@@ -9,6 +9,7 @@
 extern crate pkg_config;
 
 fn main() {
+    let res = pkg_config::find_library("syslog-ng-native-connector");
     let res = pkg_config::find_library("syslog-ng");
     match res {
         Ok(value) => {

@@ -16,6 +16,7 @@ pub mod cfg;
 pub mod messages;
 pub mod logparser;
 pub mod logpipe;
+pub mod module;
 
 pub use types::*;
 pub use logmsg::*;

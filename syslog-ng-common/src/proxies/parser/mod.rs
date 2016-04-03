@@ -27,7 +27,7 @@ pub trait Parser<P: Pipe>: Clone {
 }
 
 #[macro_export]
-macro_rules! parser_plugin {
+macro_rules! native_parser_proxy {
     ($name:ty) => {
 
 pub mod _parser_plugin {

@@ -14,13 +14,13 @@ pub use proxies::parser::{OptionError, Parser, ParserBuilder};
 
 #[repr(C)]
 pub struct ParserProxy<B>
-    where B: ParserBuilder<LogParser>
+    where B: ParserBuilder<LogParser>, B::Parser: Into<B>
 {
     pub parser: Option<B::Parser>,
     pub builder: Option<B>,
 }
 
-impl<B> ParserProxy<B> where B: ParserBuilder<LogParser>
+impl<B> ParserProxy<B> where B: ParserBuilder<LogParser>, B::Parser: Into<B>
 {
     pub fn new(cfg: GlobalConfig) -> ParserProxy<B> {
         ParserProxy {
@@ -43,6 +43,12 @@ impl<B> ParserProxy<B> where B: ParserBuilder<LogParser>
         }
     }
 
+    pub fn deinit(&mut self) -> bool {
+        let parser = self.parser.take().expect("Called deinit() when parser was not set");
+        self.builder = Some(parser.into());
+        return true
+    }
+
     pub fn set_option(&mut self, name: String, value: String) {
         let builder = self.builder.as_mut().expect("Failed to get builder on a ParserProxy");
         builder.option(name, value);
@@ -56,7 +62,7 @@ impl<B> ParserProxy<B> where B: ParserBuilder<LogParser>
     }
 }
 
-impl<B> Clone for ParserProxy<B> where B: ParserBuilder<LogParser> {
+impl<B> Clone for ParserProxy<B> where B: ParserBuilder<LogParser>, B::Parser: Into<B> {
     fn clone(&self) -> ParserProxy<B> {
         ParserProxy {parser: self.parser.clone(), builder: self.builder.clone()}
     }

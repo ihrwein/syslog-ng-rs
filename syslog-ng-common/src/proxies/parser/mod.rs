@@ -23,7 +23,7 @@ pub trait ParserBuilder<P: Pipe>: Clone {
     fn build(self) -> Result<Self::Parser, OptionError>;
 }
 
-pub trait Parser<P: Pipe>: Clone {
+pub trait Parser<P: Pipe> {
     fn parse(&mut self, pipe: &mut P, msg: &mut LogMessage, input: &str) -> bool;
 }
 
